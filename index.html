@@ -253,6 +253,7 @@ textarea{font:inherit;color:var(--ink);background:var(--white);border:1px solid 
 .checks li{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.55}
 .checks li::before{content:"";flex:none;width:22px;height:22px;border-radius:50%;margin-top:1px;background:var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.4 6.6l2.5 2.5 4.8-5.6' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/13px 13px no-repeat}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+.sg-head,.sg-row{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.25fr);gap:12px;align-items:center}.sg-ar{text-align:center;color:var(--red,#E42313);font-weight:700;font-size:20px}@media(max-width:760px){.sg-head{display:none}.sg-row{grid-template-columns:1fr;gap:6px}.sg-ar{transform:rotate(90deg)}}
 </style>
 </head>
 <body>
@@ -261,7 +262,7 @@ textarea{font:inherit;color:var(--ink);background:var(--white);border:1px solid 
     <div class="brand"><i></i><span>Telkom Digital</span></div>
     <div class="topright">
       <span class="counter" id="counter" aria-live="polite"></span>
-      <button class="btn ghost" id="pollBtn">Polling</button>
+      
       <button class="btn ghost" id="menuBtn" aria-expanded="false" aria-controls="menu">Daftar slide</button>
     </div>
     <div class="progress" id="progress"></div>
@@ -581,9 +582,9 @@ defSlide('cover','Cover',
  });
 
 defSlide('tujuan','Tujuan sesi dan keputusan',
- 'Agar sesi ini efisien, saya sampaikan di awal apa yang saya harapkan. Ada dua keputusan: menetapkan satu sampai dua opsi untuk disempurnakan, dan menyetujui kerangka penilaian enam ukuran. Menjelang akhir kita akan mengambil polling singkat untuk keduanya. Klik tiap keputusan untuk melihat alasannya.',
+ 'Agar sesi ini efisien, saya sampaikan di awal apa yang saya harapkan. Ada dua keputusan: menetapkan satu sampai dua opsi untuk disempurnakan, dan menyetujui kerangka penilaian enam ukuran. Klik tiap keputusan untuk melihat alasannya.',
  function(){
-  var agenda=[['konteks','Konteks dan peran Telkom Digital'],['logomark','Alasan memakai logomark'],['kriteria','Kriteria evaluasi'],['opsi-01','Enam opsi logo'],['rekomendasi','Rekomendasi'],['polling','Polling dan tahap selanjutnya']];
+  var agenda=[['konteks','Konteks dan peran Telkom Digital'],['logomark','Alasan memakai logomark'],['palet','Palet warna dan reason'],['opsi-01','Enam opsi logo'],['keputusan','Tahap selanjutnya dan keputusan']];
   var list=el('div',{class:'stack',style:'gap:4px'});
   agenda.forEach(function(a,i){list.appendChild(el('button',{class:'listbtn',type:'button','aria-pressed':'false',onclick:function(){goId(a[0]);}},el('span',{class:'num',text:two(i+1)}),a[1]));});
   var dec=accordion([
@@ -650,23 +651,46 @@ defSlide('logomark','Mengapa logomark',
         el('div',{class:'card navy',style:'margin-top:24px'},el('h3',{text:'Tulisan tetap ada'}),el('p',{text:'Logomark tidak menggantikan tulisan. Tulisan Telkom Digital (Gotham) tetap menjadi pasangannya dalam lockup.'})))));
  });
 
-defSlide('kriteria','Kriteria evaluasi',
- 'Agar penilaiannya objektif, saya memakai ukuran yang sama untuk semua opsi. Klik tiap kriteria untuk melihat mengapa kriteria itu penting dan bagaimana mengujinya. Semua opsi tetap berada dalam batasan guideline: Telkom Red, putih, abu-abu, dan hitam, dengan tipografi Gotham.',
+defSlide('palet','Palet warna dan reason',
+ 'Palet logo dibatasi guideline pada empat warna: Telkom Red, putih, abu-abu, dan hitam. Klik tiap warna untuk melihat peran dan alasannya. Alasan di slide ini adalah pertimbangan desain, bukan fakta dari Telkom. Dua hal yang perlu diperhatikan: merah paling kuat sebagai simbol tetapi rawan terkesan agresif bila bentuknya tajam, dan hitam tidak dipakai untuk simbol karena kesannya dingin. Semua eksplorasi awal yang memakai warna lain atau gradasi sudah dikeluarkan; versi final memakai merah flat.',
  function(){
+  var PAL=[
+   {n:'Telkom Red',hex:'#E42313',role:'Warna simbol (logomark)',
+    why:'Merah adalah warna utama dalam guideline, jadi simbol langsung terbaca sebagai bagian dari keluarga Telkom dan paling cepat dikenali pada ukuran kecil.',
+    cau:'Merah penuh terasa tegas. Bentuk yang tajam atau saling menusuk mudah terbaca agresif, sehingga bentuk simbol perlu dilembutkan.',
+    ct:'Putih di atas merah: kontras 4,6 : 1'},
+   {n:'Putih',hex:'#FFFFFF',role:'Latar dan versi terbalik',
+    why:'Putih memberi ruang kosong agar bentuk simbol terbaca bersih. Putih juga dipakai untuk versi terbalik (simbol putih di atas latar merah) saat logo ditaruh di area berwarna.',
+    cau:'Di atas latar terang, putih tidak terlihat. Versi terbalik hanya dipakai pada latar merah atau hitam.',
+    ct:'Putih di atas merah: kontras 4,6 : 1'},
+   {n:'Abu-abu',hex:'#706F6F',role:'Pendukung dan teks sekunder',
+    why:'Abu-abu menurunkan dominasi merah dan cocok untuk informasi sekunder, seperti keterangan di bawah nama, tanpa terasa seberat hitam.',
+    cau:'Kontras terhadap putih cukup untuk teks, tetapi goresan tipis berwarna abu-abu mudah hilang saat diperkecil. Tidak dipakai untuk simbol.',
+    ct:'Abu-abu di atas putih: kontras 5,0 : 1'},
+   {n:'Hitam',hex:'#1D1D1B',role:'Teks dan tulisan Telkom Digital',
+    why:'Hitam memberi kontras tertinggi untuk tulisan (Gotham) pada latar terang, sehingga nama tetap jelas di ukuran kecil.',
+    cau:'Hitam pada bentuk simbol terasa dingin dan berat, sementara kesan itu harus dihindari. Karena itu hitam dibatasi untuk tulisan, bukan simbol.',
+    ct:'Hitam di atas putih: kontras 16,9 : 1'}
+  ];
   var panel=el('div',{class:'card',role:'region','aria-live':'polite'}),btns=[];
   function show(i){btns.forEach(function(b,j){b.setAttribute('aria-pressed',j===i?'true':'false');});
-    panel.textContent='';panel.appendChild(el('h3',{text:CRIT[i].name}));
-    panel.appendChild(reasonBox(CRIT[i].why,'Reason: kenapa penting'));
-    panel.appendChild(el('div',{style:'margin-top:16px'},el('h4',{style:'color:var(--navy)',text:'Cara menguji'}),el('p',{style:'margin-top:2px',text:CRIT[i].test})));}
+    var p=PAL[i];panel.textContent='';
+    panel.appendChild(el('div',{style:'display:flex;gap:16px;align-items:center;margin-bottom:14px'},
+      el('i',{style:'width:64px;height:64px;border-radius:16px;border:1px solid var(--line);flex:none;display:block;background:'+p.hex}),
+      el('div',null,el('h3',{text:p.n+' '+p.hex}),el('p',{class:'note',style:'margin-top:2px',text:'Peran: '+p.role}))));
+    panel.appendChild(reasonBox(p.why,'Reason: kenapa warna ini'));
+    panel.appendChild(el('div',{class:'card info warn',style:'margin-top:14px'},el('h4',{text:'Yang perlu diperhatikan'}),el('p',{text:p.cau})));
+    panel.appendChild(el('p',{class:'note',style:'margin-top:12px',text:p.ct}));}
   var list=el('div',{class:'stack',style:'gap:2px'});
-  CRIT.forEach(function(c,i){var b=el('button',{class:'listbtn',type:'button','aria-pressed':'false',onclick:function(){show(i);}},el('span',{class:'num',text:two(i+1)}),c.name);btns.push(b);list.appendChild(b);});
+  PAL.forEach(function(p,i){var b=el('button',{class:'listbtn',type:'button','aria-pressed':'false',onclick:function(){show(i);}},
+    el('i',{style:'width:26px;height:26px;border-radius:8px;border:1px solid var(--line);flex:none;display:block;background:'+p.hex}),p.n+' '+p.hex);btns.push(b);list.appendChild(b);});
   show(0);
-  var sw=el('div',{class:'sw'});
-  [['Telkom Red','#E42313'],['Putih','#FFFFFF'],['Abu-abu','#706F6F'],['Hitam','#1D1D1B']].forEach(function(c){sw.appendChild(el('div',null,el('i',{style:'background:'+c[1]}),c[0]+' '+c[1]));});
   return el('div',{class:'slide'},
-    hdr('Enam ukuran yang sama untuk semua opsi','Klik kriteria untuk melihat alasan dan cara mengujinya.'),
-    el('div',{class:'cols even'},el('div',null,list),el('div',null,panel,
-      el('div',{class:'card line',style:'margin-top:16px'},el('h4',{style:'color:var(--navy)',text:'Batasan guideline'}),el('p',{class:'note',style:'margin-top:2px',text:'Palet ketat dan tipografi Gotham. Eksplorasi berfokus pada simbol.'}),sw))));
+    hdr('Palet warna: empat warna dari guideline','Klik warna untuk melihat peran dan alasannya.'),
+    el('div',{class:'cols even'},
+      el('div',null,sec('Empat warna, klik untuk reason'),list,
+        el('div',{class:'card navy',style:'margin-top:24px'},el('h3',{text:'Tidak ada warna lain'}),el('p',{text:'Gradasi, bayangan, dan warna di luar empat ini dikeluarkan dari eksplorasi. Versi final memakai Telkom Red flat dengan tipografi Gotham.'}))),
+      el('div',null,panel,el('p',{class:'note',style:'margin-top:12px',text:'Alasan adalah pertimbangan desain, bukan fakta dari Telkom.'}))));
  });
 
 defSlide('ikhtisar','Ikhtisar opsi',
@@ -738,167 +762,19 @@ CON.forEach(function(c){
  });
 });
 
-defSlide('rekomendasi','Rekomendasi',
- 'Dari penilaian tiap opsi, saya merekomendasikan Opsi 06 sebagai arah utama, dengan tiga alasan: paling langsung menggambarkan pesan inti, konsisten pada ukuran teknis, dan masih bisa dikembangkan menjadi lebih hangat. Opsi 05 saya usulkan sebagai alternatif yang dikembangkan paralel. Opsi 02 tetap menjadi pembanding bersyarat, karena membawa inisial TD tetapi keterbacaannya perlu diuji. Klik tombol untuk melihat alasan setiap pilihan, termasuk mengapa Opsi 01, 03, dan 04 tidak menjadi arah utama. Keputusan akhir ada pada Bapak/Ibu.',
- function(){
-  var V={
-   a:{h:'Opsi 06, Dua Panah Berhadapan',tag:'Rekomendasi utama',mk:6,items:[
-     'Paling langsung menggambarkan pesan inti: dua bentuk bertemu, seperti kebutuhan dan solusi yang pas.',
-     'Konsisten pada ukuran teknis: tetap jelas dalam satu warna dan pada 16–32 px.',
-     'Mudah dikembangkan menjadi lebih hangat dengan melembutkan sudut.'],
-     need:'Syarat lanjut: uji persepsi (apakah terbaca fast-forward, ekor ikan, atau pita), cek kemiripan, dan komunikasikan ukuran berbeda sebagai dua mitra yang saling melengkapi.'},
-   b:{h:'Opsi 05, Empat Bilah Berputar',tag:'Alternatif',mk:5,items:[
-     'Paling kuat mewakili sifat mudah didekati dan makna ekosistem.',
-     'Bentuk organiknya paling mudah diterjemahkan menjadi mascot yang hangat.',
-     'Dikembangkan paralel sebagai pembanding selama penyempurnaan.'],
-     need:'Syarat lanjut: bentuk disederhanakan (tanpa lapisan bayangan), dan lolos pengecekan kemiripan karena pola baling-baling lazim.'},
-   c:{h:'Opsi 02, Monogram TD',tag:'Pembanding bersyarat',mk:2,items:[
-     'Satu-satunya opsi yang membawa nama brand (TD) langsung ke simbol.',
-     'Bentuk blok masih terbaca pada 16 px dan kuat dalam satu warna.',
-     'Risiko utamanya: huruf T dan D belum tentu terbaca, dan bisa terbaca sebagai tanda plus.'],
-     need:'Syarat lanjut: uji baca ke beberapa orang yang belum tahu konteks. Dilanjutkan hanya jika inisial TD terbaca tanpa dijelaskan.'},
-   d:{h:'Mengapa Opsi 01, 03, dan 04 bukan arah utama?',tag:'Yang tidak dipilih',mk:null,items:[
-     'Opsi 01: kepingan terlalu ramai, menjadi cincin bergerigi pada 16 px, dan kesan teknisnya dingin.',
-     'Opsi 03: pesannya lebih ke kecepatan daripada pertemuan, bentuknya sangat umum, dan goresan tipis hilang saat kecil.',
-     'Opsi 04: arah putarnya belum menyampaikan “bertemu”, dan menyatu menjadi gerigi saat kecil.'],
-     need:'Ketiganya tetap tercatat sebagai bahan pembanding, bukan dibuang.'}
-  };
-  var panel=el('div',{class:'card',role:'region','aria-live':'polite',style:'margin-top:20px'});
-  function show(k){var v=V[k];panel.textContent='';
-    var head=el('div',{style:'display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:20px'});
-    if(v.mk)head.appendChild(el('div',{class:'tile',style:'min-height:0;width:112px;height:112px;padding:14px'},el('img',{class:'logo-img',style:'max-width:100%',src:LOGOS[v.mk].mark,alt:ALT[v.mk]+' (simbol saja)'})));
-    head.appendChild(el('div',null,el('p',{class:'sec',style:'margin-bottom:4px',text:v.tag}),el('h3',{style:'font-size:24px',text:v.h})));
-    panel.appendChild(head);
-    panel.appendChild(el('ul',{class:'checks'},v.items.map(function(t){return el('li',{text:t});})));
-    panel.appendChild(reasonBox(v.need,'Syarat lanjut'));}
-  show('a');
-  return el('div',{class:'slide'},
-    hdr('Rekomendasi: Opsi 06 sebagai arah utama','Dengan Opsi 05 sebagai alternatif yang dikembangkan paralel.'),
-    seg([{v:'a',t:'Opsi 06 (utama)'},{v:'b',t:'Opsi 05 (alternatif)'},{v:'c',t:'Opsi 02 (pembanding)'},{v:'d',t:'Mengapa bukan 01, 03, 04?'}],'a',show,'Pilih rekomendasi'),
-    el('div',{style:'max-width:820px'},panel,
-      el('div',{class:'actions'},el('button',{class:'btn primary',type:'button',onclick:function(){goId('polling');}},'Lanjut ke polling'),el('span',{class:'note',text:'Dua pertanyaan singkat, boleh dijawab sebagian.'}))));
- });
-
-/* ---- Polling slide ---- */
-defSlide('polling','Polling',
- 'Sekarang kita hitung suara langsung di slide ini. Ada dua pertanyaan: opsi mana yang dilanjutkan (tiap orang maksimal dua pilihan), dan apakah kerangka penilaian disetujui. Setiap kali ada yang memilih, tekan tombol plus pada jawabannya; tombol minus untuk mengoreksi. Hasil terbanyak tampil langsung di sebelah kanan. Hasil polling menjadi masukan, keputusan akhir tetap ada pada Bapak/Ibu.',
- function(){
-  var rows={},armed=false;
-  var qWrap=el('div');
-  function bump(qid,k,d){counts[qid][k]=Math.max(0,(counts[qid][k]||0)+d);saveCounts();msg.textContent=storeOk?'':'Penyimpanan permanen tidak tersedia, jadi hitungan hilang jika halaman ditutup.';refresh();}
-  var msg=el('p',{class:'flash',role:'status'});
-  POLL.forEach(function(q){
-    var box=el('div',{class:'q',role:'group','aria-label':q.q});
-    box.appendChild(el('h4',{text:q.q}));
-    box.appendChild(el('p',{class:'note',text:q.hint}));
-    rows[q.id]={};
-    q.opts.forEach(function(o){
-      var bar=el('span',{class:'bar','aria-hidden':'true'});
-      var pct=el('span',{class:'pct'});
-      var n=el('span',{class:'n',role:'status','aria-label':'Jumlah suara '+o[1],text:'0'});
-      var minus=el('button',{type:'button',class:'stp','aria-label':'Kurangi suara '+o[1],text:'\u2212'});
-      var plus=el('button',{type:'button',class:'stp plus','aria-label':'Tambah suara '+o[1],text:'+'});
-      minus.onclick=function(){bump(q.id,o[0],-1);};
-      plus.onclick=function(){bump(q.id,o[0],1);};
-      var thumb=q.id==='a1'?el('span',{class:'thumb'},el('img',{src:LOGOS[parseInt(o[0],10)].mark,alt:ALT[parseInt(o[0],10)]})):null;
-      var row=el('div',{class:'crow'},bar,thumb,el('span',{class:'lab',text:o[1]}),pct,el('span',{class:'step'},minus,n,plus));
-      rows[q.id][o[0]]={row:row,bar:bar,pct:pct,n:n};
-      box.appendChild(row);
-    });
-    qWrap.appendChild(box);
-  });
-  var r=[el('span'),el('span')],tl=[el('small',{class:'tt'}),el('small',{class:'tt'})];
-  var res=el('div',{class:'res'},
-    el('div',null,el('small',{text:'Opsi terbanyak'}),r[0],tl[0]),
-    el('div',null,el('small',{text:'Kerangka evaluasi'}),r[1],tl[1]));
-  var cflash=el('p',{class:'flash',role:'status'});
-  var sumBox=el('textarea',{readonly:true,'aria-label':'Ringkasan hasil polling',rows:'6',style:'display:none'});
-  var copyBtn=el('button',{class:'btn onnavy',type:'button',text:'Salin ringkasan'});
-  var wipeBtn=el('button',{class:'btn onnavy',type:'button',text:'Reset semua hitungan'});
-  function refresh(){
-    var t=tally();
-    POLL.forEach(function(q,qi){
-      var max=0;q.opts.forEach(function(o){max=Math.max(max,t.res[q.id][o[0]]);});
-      var total=t.tot[q.id];
-      q.opts.forEach(function(o){
-        var n=t.res[q.id][o[0]],x=rows[q.id][o[0]];
-        x.n.textContent=String(n);
-        x.pct.textContent=total?Math.round(n/total*100)+'%':'';
-        x.bar.style.width=total?(n/total*100)+'%':'0%';
-        if(max>0&&n===max)x.row.classList.add('lead');else x.row.classList.remove('lead');
-      });
-      r[qi].textContent=leadText(t,q)||'Belum ada suara';
-      tl[qi].textContent='Total '+total+(q.type==='multi'?' pilihan':' suara');
-    });
-    wipeBtn.disabled=!POLL.some(function(q){return t.tot[q.id]>0;});
-    sumBox.value=summaryText(t);
-  }
-  wipeBtn.onclick=function(){
-    if(!armed){armed=true;wipeBtn.textContent='Klik lagi untuk mereset';return;}
-    armed=false;wipeBtn.textContent='Reset semua hitungan';
-    zeroCounts();saveCounts();msg.textContent='Semua hitungan direset.';refresh();
-  };
-  copyBtn.onclick=function(){
-    var tx=summaryText(tally());
-    function ok(){cflash.textContent='Ringkasan tersalin.';}
-    function fail(){try{sumBox.style.display='block';sumBox.value=tx;sumBox.focus();sumBox.select();var rr=document.execCommand&&document.execCommand('copy');cflash.textContent=rr?'Ringkasan tersalin.':'Tidak bisa menyalin otomatis. Teks sudah dipilih, tekan Ctrl/Cmd + C.';}catch(e){cflash.textContent='Tidak bisa menyalin otomatis. Pilih teks lalu salin secara manual.';}}
-    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tx).then(ok,fail);}else{fail();}}catch(e){fail();}
-  };
-  pollView={refresh:refresh};
-  refresh();
-  return el('div',{class:'slide'},
-    hdr('Polling: arah yang kita ambil','Hitung suara langsung di sini: tekan + setiap ada yang memilih, tekan \u2212 untuk mengoreksi. Hitungan tersimpan di browser perangkat ini.'),
-    el('div',{class:'cols'},
-      el('div',null,qWrap,msg),
-      el('div',{class:'card navy',style:'position:sticky;top:0'},
-        el('p',{class:'sec',style:'color:rgba(255,255,255,.72)',text:'Hasil sementara'}),res,
-        el('div',{class:'row-btns',style:'margin-top:20px'},copyBtn,wipeBtn),cflash,sumBox,
-        el('p',{class:'note',style:'margin-top:16px;color:rgba(255,255,255,.7)',text:'Hasil polling menjadi masukan dan belum menggantikan keputusan atasan.'}))));
- });
-
 /* ---- Decisions slide ---- */
 defSlide('keputusan','Tahap selanjutnya dan keputusan',
- 'Sebagai penutup, ini tahap berikutnya: penyempurnaan bentuk, uji teknis, validasi, lalu review bersama. Di sebelah kanan terlihat dua keputusan yang diminta, lengkap dengan hasil polling terakhir. Hasil polling menjadi masukan, keputusan akhir ada pada Bapak/Ibu. Ringkasannya bisa disalin ke catatan project. Terima kasih, saya terbuka untuk diskusi.',
+ 'Sebagai penutup, ini tahap berikutnya: penyempurnaan bentuk, uji teknis, validasi, lalu review bersama. Di sebelah kanan terlihat dua keputusan yang diminta. Keputusan akhir ada pada Bapak/Ibu. Terima kasih, saya terbuka untuk diskusi.',
  function(){
   var steps=accordion(STEPS.map(function(s,i){return {head:el('span',null,el('span',{class:'note',style:'margin-right:12px',text:two(i+1)}),s[0]),body:el('div',null,el('p',{text:s[1]}),reasonBox(s[2]))};}),{open:0});
-  var live=[el('p',{class:'live'}),el('p',{class:'live'})];
-  var cflash=el('p',{class:'flash',role:'status'});
-  var sumBox=el('textarea',{readonly:true,'aria-label':'Ringkasan keputusan',rows:'6'});
-  var copyBtn=el('button',{class:'btn primary',type:'button',text:'Salin ringkasan'});
-  function refresh(){
-    var t=tally();
-    [0,1].forEach(function(i){var lt=leadText(t,POLL[i]);live[i].textContent='';
-      if(!lt){live[i].appendChild(document.createTextNode('Hasil polling: belum ada suara.'));}
-      else{live[i].appendChild(document.createTextNode('Hasil polling: '));live[i].appendChild(el('b',{text:lt}));}});
-    sumBox.value=summaryText(t);
-  }
-  copyBtn.onclick=function(){
-    var t=sumBox.value;
-    function ok(){cflash.textContent='Ringkasan tersalin.';}
-    function fail(){try{sumBox.focus();sumBox.select();var r=document.execCommand&&document.execCommand('copy');cflash.textContent=r?'Ringkasan tersalin.':'Tidak bisa menyalin otomatis. Teks sudah dipilih, tekan Ctrl/Cmd + C.';}catch(e){cflash.textContent='Tidak bisa menyalin otomatis. Pilih teks lalu salin secara manual.';}}
-    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fail);}else{fail();}}catch(e){fail();}
-  };
-  pollView={refresh:refresh};
-  refresh();
   var decs=[['Menetapkan 1–2 opsi untuk disempurnakan','Rekomendasi: Opsi 06, dengan Opsi 05 sebagai alternatif.'],['Menyetujui kerangka evaluasi enam ukuran','Ukuran yang sama dipakai di seluruh tahap review.']];
   var decWrap=el('div');
-  decs.forEach(function(d,i){decWrap.appendChild(el('div',{class:'dec'},el('span',{class:'bn',text:String(i+1)}),el('div',null,el('h4',{text:d[0]}),el('p',{class:'note',style:'margin-top:2px',text:d[1]}),live[i])));});
+  decs.forEach(function(d,i){decWrap.appendChild(el('div',{class:'dec'},el('span',{class:'bn',text:String(i+1)}),el('div',null,el('h4',{text:d[0]}),el('p',{class:'note',style:'margin-top:2px',text:d[1]}))));});
   return el('div',{class:'slide'},
     hdr('Tahap selanjutnya dan keputusan yang diperlukan','Penyempurnaan dilakukan setelah arah disepakati.'),
     el('div',{class:'cols even'},
       el('div',null,sec('Tahap berikutnya, klik untuk reason'),steps),
-      el('div',{class:'card'},el('h3',{style:'margin-bottom:12px',text:'Keputusan yang diminta'}),decWrap,
-        el('div',{class:'field',style:'margin-top:12px'},el('p',{class:'sec',text:'Ringkasan, siap ditempel ke Log Keputusan'}),sumBox),
-        el('div',{class:'row-btns'},copyBtn),cflash)));
- });
-
-defSlide('faq','Antisipasi pertanyaan',
- 'Slide ini disiapkan untuk sesi tanya jawab. Klik pertanyaan untuk melihat jawabannya. Jika ada pertanyaan yang belum tercakup, catat dan bawa ke review berikutnya.',
- function(){
-  var acc=accordion(FAQ.map(function(f){return {head:f[0],body:reasonBox(f[1],'Jawaban')};}),{open:0});
-  return el('div',{class:'slide'},
-    hdr('Antisipasi pertanyaan','Klik pertanyaan untuk melihat jawaban dan alasannya.'),
-    el('div',{style:'max-width:820px'},acc));
+      el('div',{class:'card'},el('h3',{style:'margin-bottom:12px',text:'Keputusan yang diminta'}),decWrap)));
  });
 
 /* ---------- Navigation ---------- */
@@ -928,7 +804,7 @@ function render(i){
 function menuItems(){Array.prototype.forEach.call(menu.children,function(b,i){if(i===cur)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});}
 SL.forEach(function(s,i){menu.appendChild(el('button',{type:'button',onclick:function(){go(i);}},el('span',{class:'n',text:String(i+1)}),s.title));});
 function closeMenu(){menu.setAttribute('hidden','');menuBtn.setAttribute('aria-expanded','false');}
-document.getElementById('pollBtn').onclick=function(){goId('polling');};
+
 menuBtn.onclick=function(){var open=menu.hasAttribute('hidden');if(open){menu.removeAttribute('hidden');menuBtn.setAttribute('aria-expanded','true');}else closeMenu();};
 document.addEventListener('click',function(e){if(!menu.contains(e.target)&&e.target!==menuBtn)closeMenu();});
 prevB.onclick=function(){go(cur-1);};nextB.onclick=function(){go(cur+1);};
