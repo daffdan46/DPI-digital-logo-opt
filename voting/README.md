@@ -24,3 +24,7 @@ Responsive voting website, based on the 6 original logo images and all 6 motion 
 - The regular `index.html` loads the six MP4 files from `video/`; keep that folder when deploying.
 - **One-file alternative:** `Telkom-Digital-Voting-Dengan-Video.html` embeds all six MP4 files as data and can be renamed `index.html` for GitHub Pages. It is larger and slower to load than the ZIP website version.
 - Voting is still browser-only until Supabase is configured; motion is not evidence that any workflow stage is completed.
+
+
+## Homepage mascot background video
+The landing-page hero includes `video/telkom-digital-mascot.mp4` (the supplied ~10-second video) and a still poster image. It automatically plays muted, loops, and works inline on phones. Browsers may limit autoplay, in which case the poster serves as a fallback. For visitors who enable reduced motion, the poster is shown instead of autoplay. Upload the entire folder, not `index.html` alone.
